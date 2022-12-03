@@ -1,38 +1,44 @@
-import {useEffect} from "react";
-import { Route, Routes } from "react-router-dom"
+import { Navigate, Route, Routes } from "react-router-dom"
 import Navbar from './components/Navbar';
 import './App.css';
 import LandingPage from './components/LandingPage';
-import Footer from './components/Footer';
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Signup from "./pages/Signup";
-
+import OTPVerification from './pages/OTPVerifaction'
+import PasswordReset from "./components/PasswordReset";
+import {AuthProvider} from '../src/context/AuthProvider'
+import PrivateRoute from "./components/PrivateRoute";
+import WithFooter from "./components/WithFooter";
+import WithoutFooter from "./components/WithoutFooter";
 
 
 function App() {
-  useEffect(() => {
-    //for running the script to toggle the the navbar
-    const script = document.createElement('script');
-    script.src = "script.js";
-    script.async = true;
-
-    document.body.appendChild(script);
-
-    return () => {
-      document.body.removeChild(script);
-    }
-  }, []);
   return (
     <>
+      <AuthProvider>
       <Navbar />
       <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route element={<WithoutFooter/>}>
+          <Route path="/dashboard" element={ <PrivateRoute private={true} > <Dashboard /> </PrivateRoute>} />
+        </Route>
+
+        <Route element={<WithFooter />} >
+          <Route exact path="/" element={ <PrivateRoute private={false}> <LandingPage /> </PrivateRoute>} />
+
+          <Route path="/login" element={ <PrivateRoute private={false}> <Login /> </PrivateRoute>
+          } />
+
+          <Route path="/signup" element={ <PrivateRoute private={false}> <Signup /> </PrivateRoute>} />
+
+          <Route path="/verify" element={ <PrivateRoute private={false}> <OTPVerification /> </PrivateRoute>} />
+
+          <Route path="/reset" element={ <PrivateRoute private={false}> <PasswordReset /> </PrivateRoute>} />
+        </Route>
+
+        <Route path="*"  element={<Navigate to='' />} />
       </Routes>
-      <Footer />
+      </AuthProvider>
     </>
   );
 }

@@ -1,8 +1,10 @@
-import React  from "react";
-import { Link,} from "react-router-dom";
+import React, { useState }  from "react";
+import { Link} from "react-router-dom";
+import { useAuth } from "../context/AuthProvider";
+function Navbar() {
 
-function Navbar({ user }) {
-  
+  const [btnstatus,setBtnstatus]=useState(true);
+  const {user}=useAuth();
   return (
     <>
       <nav className="bg-white px-2 sm:px-4 py-2.5 dark:bg-gray-900 fixed w-full z-20 top-0 left-0 border-b border-gray-200 dark:border-gray-600">
@@ -29,7 +31,7 @@ function Navbar({ user }) {
             fill="none"
             viewBox="0 0 24 24"
             stroke="white"
-
+            onClick={()=>{setBtnstatus(!btnstatus)}}
           >
             <path
               strokeLinecap="round"
@@ -39,43 +41,34 @@ function Navbar({ user }) {
             />
           </svg>
           <div
-            className="hidden w-full md:flex md:items-center md:w-auto"
+            className={ btnstatus ? "hidden w-full md:flex md:items-center md:w-auto":"w-full md:flex md:items-center md:w-auto"}
             id="menu"
           >
             <ul className="pt-4 text-base text-gray-400 md:flex md:justify-between md:pt-0">
-              <li>
+              <li onClick={()=>{setBtnstatus(!btnstatus)}} >
                 <Link className="md:p-4 py-2 block hover:text-white" to="/">
                   New Realeases
                 </Link>
               </li>
-              <li>
+              <li onClick={()=>{setBtnstatus(!btnstatus)}}>
                 <Link className="md:p-4 py-2 block hover:text-white" to="/">
                   About
                 </Link>
               </li>
-              <li>
+              <li onClick={()=>{setBtnstatus(!btnstatus)}}>
                 <Link className="md:p-4 py-2 block hover:text-white" to="/">
                   Contact
                 </Link>
               </li>
-              <li>
-                {user ? (
-                  <Link
-                  
-                  className="text-white bg-sky-500 md:p-3 mt-1 block py-3 pr-4 md:pl-3  md:hover:bg-transparent md:border md:dark:hover:bg-transparent font-serif focus:outline-none focus:ring-blue-300 md:hover:bg-opacity-10 rounded"
-                    to="/dashboard"
-                  >
-                    Get started
-                  </Link>
-                ) : (
+              <li onClick={()=>{setBtnstatus(!btnstatus)}}>
+              { user?(<></>):(
                   <Link
                     className="text-white bg-sky-500 md:p-3 mt-1 block py-3 pr-4 md:pl-3  md:hover:bg-transparent md:border md:dark:hover:bg-transparent font-serif focus:outline-none focus:ring-blue-300 md:hover:bg-opacity-10 rounded"
-                    to="/login"
-                  >
-                    Login
-                  </Link>
-                  
-                )}
+                      to="/login"
+                    >
+                      Get started
+                    </Link>)
+              }
               </li>
             </ul>
           </div>

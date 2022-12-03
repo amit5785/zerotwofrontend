@@ -11,8 +11,8 @@ const LandingPage = ({ user }) => {
           <div className="lg:text-7xl font-bold py-4 md:text-5xl sm:text-4xl">
             <div className="box-content overflow-hidden h-20">
                     {
-                        text.map((item) => {
-                            return <span className="text-19xl font-bold text-sky-500 block h-full pr-3 animate-wave text-center">{item}</span>
+                        text.map((item,ind) => {
+                            return <span className="text-19xl font-bold text-sky-500 block h-full pr-3 animate-wave text-center" key={ind}>{item}</span>
                         })
                     }  
                 </div>
@@ -30,7 +30,7 @@ const LandingPage = ({ user }) => {
 
         <Link
           className="bg-sky-500 block rounded-md font-medium text-4xl my-6 mx-auto px-4 py-3 text-white"
-          to="/"
+          to="/login"
         >
           Get Started
         </Link>

@@ -1,6 +1,24 @@
-import React from 'react'
-import {MdUpload} from 'react-icons/md'
+import React, {useState } from 'react'
+import {Link, useNavigate} from 'react-router-dom'
+import { useAuth } from '../context/AuthProvider';
+import { Auth } from 'aws-amplify';
 function Dashboard() {
+    const [error,setError]=useState("");
+    const navigate=useNavigate();
+    const {user}=useAuth();
+
+    const handleClick= async (event)=>{
+        event.preventDefault();
+        
+        try{
+            await Auth.signOut();
+            navigate('/');
+        }catch(err){
+            setError(err.message);
+            alert(error);
+        }
+    }
+
     return (
         <>
             <main>
@@ -12,7 +30,7 @@ function Dashboard() {
                                     <div className='hero container max-w-screen-lg mx-auto flex justify-center'>
                                         <img src="https://www.w3schools.com/w3css/img_avatar3.png" className='w-2/3 rounded-full ring-2' alt="" />
                                     </div>
-                                    <h1 className='text-blue-600 text-lg text-center font-medium'>Jhon Doe</h1>
+                                    <h1 className='text-blue-600 text-lg text-center font-medium'>{user && user.attributes.email}</h1>
                                 </div>
                                 <hr />
                                 <ul className="list-reset flex flex-row md:flex-col pt-3 md:py-3 px-1 md:px-2 text-center md:text-left">
@@ -35,6 +53,11 @@ function Dashboard() {
                                         <a href="/" className="block py-1 md:py-3 pl-0 md:pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-red-500">
                                             <i className="fa fa-wallet pr-0 md:pr-3"></i><span className="pb-1 md:pb-0 text-xs md:text-base text-gray-400 md:text-gray-200 block md:inline-block">Payments</span>
                                         </a>
+                                    </li>
+                                    <li className="mr-3 flex-1">
+                                        <Link className="block py-1 md:py-3 pl-0 md:pl-1 align-middle text-white no-underline hover:text-white border-b-2 border-gray-800 hover:border-red-500" onClick={handleClick}>
+                                            <i className="fa fa-wallet pr-0 md:pr-3"></i><span className="pb-1 md:pb-0 text-xs md:text-base text-gray-400 md:text-gray-200 block md:inline-block">Logout</span>
+                                        </Link>
                                     </li>
                                 </ul>
                             </div>
